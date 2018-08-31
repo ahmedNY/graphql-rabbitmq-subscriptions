@@ -17,7 +17,7 @@ export interface PubSubRabbitMQBusOptions {
   connectionListener?: (err: Error) => void;
   triggerTransform?: TriggerTransform;
   logger?: Logger;
-  useQueues?: false;
+  useQueues?: boolean;
 }
 
 export class AmqpPubSub implements PubSubEngine {
