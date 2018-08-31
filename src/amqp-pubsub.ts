@@ -4,6 +4,8 @@ import {
   RabbitMqSingletonConnectionFactory,
   RabbitMqPublisher,
   RabbitMqSubscriber,
+  RabbitMqConsumer,
+  RabbitMqProducer,
   IRabbitMqConnectionConfig,
 } from 'rabbitmq-pub-sub';
 import { each } from 'async';
@@ -15,6 +17,7 @@ export interface PubSubRabbitMQBusOptions {
   connectionListener?: (err: Error) => void;
   triggerTransform?: TriggerTransform;
   logger?: Logger;
+  useQueues?: false;
 }
 
 export class AmqpPubSub implements PubSubEngine {
@@ -38,8 +41,13 @@ export class AmqpPubSub implements PubSubEngine {
 
     const factory = new RabbitMqSingletonConnectionFactory(logger, config);
 
-    this.consumer = new RabbitMqSubscriber(logger, factory);
-    this.producer = new RabbitMqPublisher(logger, factory);
+    if (options.useQueues) {
+      this.consumer = new RabbitMqConsumer(logger, factory);
+      this.producer = new RabbitMqProducer(logger, factory);
+    } else {
+      this.consumer = new RabbitMqSubscriber(logger, factory);
+      this.producer = new RabbitMqPublisher(logger, factory);
+    }
 
     this.subscriptionMap = {};
     this.subsRefsMap = {};
