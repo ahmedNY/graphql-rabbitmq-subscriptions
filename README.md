@@ -124,3 +124,15 @@ const pubsub = new AmqpPubSub({
   logger,
 });
 ```
+
+## Use rabbitmq queues feature
+Messages are sent using rabbitmq "Exchanges", if you want to send messages through rabbitmq "Queues",  set useQueues to true in the options object
+ 
+```javascript
+import { AmqpPubSub } from 'graphql-rabbitmq-subscriptions';
+
+const pubsub = new AmqpPubSub({
+  logger,
+  useQueues: true
+});
+```
